@@ -77,6 +77,18 @@ button[data-baseweb="button"][id="chat_icon"]:hover {
 """
 st.markdown(page_bg, unsafe_allow_html=True)
 
+st.markdown(
+    """
+    <style>
+    table {
+        width: 100% !important;
+        word-wrap: break-word;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # ------------------- Title -------------------
 st.title("📊 People's Priorities - AI Dashboard")
 st.subheader("🌍 Multilingual, Voice & Photo Feedback Analyzer")
@@ -113,22 +125,25 @@ if user_input:
 st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------- Recurring Themes Analyzer -------------------
-st.header("🔗 Recurring Themes Analyzer")
-texts = [
-    "Need school upgrade",
-    "Hospital required",
-    "Road repair needed",
-    "Vocational training centre",
-    "More teachers in schools",
-    "Better healthcare facilities",
-    "Fix broken streetlights"
-]
-vectorizer = TfidfVectorizer(stop_words='english')
-X = vectorizer.fit_transform(texts)
-kmeans = KMeans(n_clusters=3, random_state=42)
-kmeans.fit(X)
-df_cluster = pd.DataFrame({"Feedback": texts, "Cluster": kmeans.labels_})
-st.table(df_cluster)
+# ✅ Example Recurring Themes Analyzer
+data = {
+    "Feedback": [
+        "Need school upgrade",
+        "Hospital required",
+        "Road repair needed",
+        "Vocational training center",
+        "More teachers needed",
+        "Better healthcare facilities",
+        "No issues mentioned"
+    ],
+    "Count": [2, 0, 0, 0, 0, 0, 1]
+}
+
+df = pd.DataFrame(data)
+
+st.subheader("Recurring Themes Analyzer")
+# ✅ Responsive table for both mobile & laptop
+st.dataframe(df, use_container_width=True)
 
 # ------------------- Voice Input -------------------
 st.header("🎤 Voice Feedback Input")
