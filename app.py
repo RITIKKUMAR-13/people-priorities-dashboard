@@ -193,14 +193,17 @@ data = {
 }
 df = pd.DataFrame(data)
 st.subheader("Citizen Feedback Data")
-st.table(df)
+df = pd.DataFrame(data)
+# ✅ Responsive table for mobile + laptop
+st.dataframe(df, use_container_width=True)
+
 fig_bar = px.bar(df, x="Category", title="Feedback by Category", color="Category")
 col1, col2 = st.columns(2)
 with col1:
-    st.plotly_chart(fig_bar, key="bar_chart" , width="stretch")
+    st.plotly_chart(fig_bar, key="bar_chart", use_container_width=True)
 with col2:
     fig_pie = px.pie(df, names="Category", title="Feedback Distribution")
-    st.plotly_chart(fig_pie, key="pie_chart" , width="stretch")
+    st.plotly_chart(fig_pie, key="pie_chart", use_container_width=True)
 
 
 # ------------------- Recommendation Engine -------------------
@@ -212,7 +215,9 @@ df["Frequency"] = df["Category"].map(category_counts)
 df["PriorityScore"] = df["Frequency"] + df["Urgency"]
 df_sorted = df.sort_values(by="PriorityScore", ascending=False)
 st.subheader("📊 Ranked Priority Projects")
-st.table(df_sorted[["Feedback","Category","Urgency","Frequency","PriorityScore"]])
+# ✅ Responsive table for mobile + laptop
+st.dataframe(df_sorted[["Feedback","Category","Urgency","Frequency","PriorityScore"]],
+             use_container_width=True)
 
 # ------------------- Copilot Chatbot (Floating Button) -------------------
 # ✅ Embedder
@@ -292,9 +297,11 @@ for idx, row in complaints_data.iterrows():
 complaints_data["RiskLevel"] = risk_flags
 
 st.subheader("Predictive Hotspot Indicator")
-st.table(complaints_data[["Feedback","Location","Timestamp","RiskLevel"]])
+# ✅ Responsive table for mobile + laptop
+st.dataframe(complaints_data[["Feedback","Location","Timestamp","RiskLevel"]],
+             use_container_width=True)
 
-# Visualization: Highlight hotspots
+# Visualization
 fig_hotspot = px.scatter(
     complaints_data,
     x="Timestamp",
@@ -304,3 +311,4 @@ fig_hotspot = px.scatter(
     title="Predictive Hotspot Indicator (Escalation Risks)"
 )
 st.plotly_chart(fig_hotspot, use_container_width=True)
+
